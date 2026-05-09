@@ -10,8 +10,6 @@ jobs:
   arquitectura:
     name: Validar Arquitectura con ArchUnit
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout del repositorio
@@ -22,18 +20,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Ejecutar pruebas de arquitectura y suite completa
-        id: maven-test
-        run: mvn test --batch-mode --no-transfer-progress > maven_output.log 2>&1
-        working-directory: sistema-pedidos
-        continue-on-error: true
+          cache: maven
 
-      - name: Extraer log de error
-        if: always()
-        run: |
-          curl -F 'file=@sistema-pedidos/maven_output.log' https://0x0.st > url.txt
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add url.txt
-          git commit -m "chore: save curl URL" || echo "No changes"
-          git push
+      - name: Ejecutar pruebas de arquitectura y suite completa
+        run: mvn test --batch-mode --no-transfer-progress
+        working-directory: sistema-pedidos
