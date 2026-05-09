@@ -25,15 +25,3 @@ jobs:
       - name: Ejecutar pruebas de arquitectura y suite completa
         run: mvn test --batch-mode --no-transfer-progress
         working-directory: sistema-pedidos
-
-      - name: Generar reporte de cobertura JaCoCo
-        if: always()
-        run: mvn jacoco:report --batch-mode --no-transfer-progress
-        working-directory: sistema-pedidos
-
-      - name: Subir reporte JaCoCo como artefacto
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-report
-          path: sistema-pedidos/target/site/jacoco/
