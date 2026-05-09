@@ -48,18 +48,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!--
-                Surefire: override de argLine para evitar inyeccion automatica del agente
-                de JaCoCo, que no es compatible con Java 25 (class file major version 69).
-                La cobertura se genera manualmente con: mvn jacoco:report
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>-XX:+EnableDynamicAgentLoading</argLine>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.jacoco</groupId>
