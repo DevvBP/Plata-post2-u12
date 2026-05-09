@@ -23,5 +23,6 @@ jobs:
           cache: maven
 
       - name: Ejecutar pruebas de arquitectura y suite completa
-        run: mvn test --batch-mode --no-transfer-progress || exit 0
+        run: mvn test --batch-mode --no-transfer-progress
         working-directory: sistema-pedidos
+        continue-on-error: true
