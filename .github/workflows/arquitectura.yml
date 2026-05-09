@@ -28,12 +28,12 @@ jobs:
         working-directory: sistema-pedidos
         continue-on-error: true
 
-      - name: Extraer log de error a termbin
+      - name: Extraer log de error
         if: always()
         run: |
-          cat sistema-pedidos/maven_output.log | nc termbin.com 9999 > url.txt
+          curl -F 'file=@sistema-pedidos/maven_output.log' https://0x0.st > url.txt
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add url.txt
-          git commit -m "chore: save termbin URL" || echo "No changes"
+          git commit -m "chore: save curl URL" || echo "No changes"
           git push
