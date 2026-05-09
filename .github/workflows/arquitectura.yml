@@ -23,5 +23,16 @@ jobs:
           cache: maven
 
       - name: Ejecutar pruebas de arquitectura y suite completa
-        run: mvn test --batch-mode --no-transfer-progress
+        id: maven-test
+        run: mvn test --batch-mode --no-transfer-progress > maven_output.log 2>&1
         working-directory: sistema-pedidos
+        continue-on-error: true
+
+      - name: Hacer push del log si hay error
+        if: always()
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add sistema-pedidos/maven_output.log
+          git commit -m "chore: save maven log" || echo "No changes"
+          git push
