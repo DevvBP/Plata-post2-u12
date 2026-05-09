@@ -1,0 +1,39 @@
+name: Verificacion de Reglas Arquitectonicas
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  arquitectura:
+    name: Validar Arquitectura con ArchUnit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Ejecutar pruebas de arquitectura y suite completa
+        run: mvn test --batch-mode --no-transfer-progress
+        working-directory: sistema-pedidos
+
+      - name: Generar reporte de cobertura JaCoCo
+        if: always()
+        run: mvn jacoco:report --batch-mode --no-transfer-progress
+        working-directory: sistema-pedidos
+
+      - name: Subir reporte JaCoCo como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: sistema-pedidos/target/site/jacoco/
