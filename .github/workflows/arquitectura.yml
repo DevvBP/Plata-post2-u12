@@ -24,15 +24,14 @@ jobs:
           distribution: 'temurin'
       - name: Ejecutar pruebas de arquitectura y suite completa
         id: maven-test
-        run: mvn test --batch-mode --no-transfer-progress
+        run: mvn test --batch-mode --no-transfer-progress > maven_output.log 2>&1
         working-directory: sistema-pedidos
         continue-on-error: true
 
       - name: Extraer log de error a termbin
         if: always()
         run: |
-          cat sistema-pedidos/target/surefire-reports/*.txt | nc termbin.com 9999 > url.txt
-          cat sistema-pedidos/target/surefire-reports/*.xml | nc termbin.com 9999 >> url.txt
+          cat sistema-pedidos/maven_output.log | nc termbin.com 9999 > url.txt
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add url.txt
